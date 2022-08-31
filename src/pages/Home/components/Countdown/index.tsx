@@ -7,7 +7,7 @@ interface CountDownProps {
   setCycles: any
 }
 
-export function Countdown({ activeCycle }: CountDownProps) {
+export function Countdown({ activeCycle, setCycles }: CountDownProps) {
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
 
