@@ -1,9 +1,5 @@
 import { Play, HandPalm } from 'phosphor-react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as zod from 'zod'
-import { useEffect, useState } from 'react'
-import { differenceInSeconds } from 'date-fns'
+import { createContext, useEffect, useState } from 'react'
 
 import {
   HomeContainer,
@@ -22,30 +18,49 @@ interface Cycle {
   finishedDate?: Date
 }
 
+interface CyclesContextType {
+  activeCycle: Cycle | undefined
+  activeCycleId: string | null
+  markCurrentCycleAsFinished: () => void
+}
+
+export const CyclesContext = createContext({} as CyclesContextType)
+
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<' ' | null>(null)
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-  let interval: number
 
-  function handleCreateNewCycle(data: NewCycleFormData) {
-    const id = String(new Date().getTime())
-    const newCycle: Cycle = {
-      id,
-      task: data.task,
-      minutesAmount: data.minutesAmount,
-      startDate: new Date(),
-    }
-    /* Lista todos os ciclos e adiciona o novo no final
-      sempre que uma alteração de estado depender dos valores anteriores nós
-      utilizamos o formato de arrow function
-    */
-    setCycles((state) => [...cycles, newCycle])
-    setActiveCycleId(id)
-    setAmountSecondsPassed(0)
-    reset()
+  function markCurrentCycleAsFinished() {
+    setCycles((state) =>
+      state.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, finishedDate: new Date() }
+        } else {
+          return cycle
+        }
+      }),
+    )
   }
+
+  // function handleCreateNewCycle(data: NewCycleFormData) {
+  //   const id = String(new Date().getTime())
+  //   const newCycle: Cycle = {
+  //     id,
+  //     task: data.task,
+  //     minutesAmount: data.minutesAmount,
+  //     startDate: new Date(),
+  //   }
+  //   /* Lista todos os ciclos e adiciona o novo no final
+  //     sempre que uma alteração de estado depender dos valores anteriores nós
+  //     utilizamos o formato de arrow function
+  //   */
+  //   setCycles((state) => [...cycles, newCycle])
+  //   setActiveCycleId(id)
+  //   setAmountSecondsPassed(0)
+  //   reset()
+  // }
 
   function handleInterruptCycle() {
     /** Percorrer todos os ciclos e para ciclo percorrido, se o ciclo for o ciclo
@@ -56,6 +71,9 @@ export function Home() {
      */
     setCycles((state) =>
       state.map((cycle) => {
+        /** activeCycle com base no ID do ciclo ativo percorre todos os ciclos e retorna
+         * o ciclo com mesmo ID do ciclo ativo
+         */
         if (cycle.id === activeCycleId) {
           return { ...cycle, interruptedDate: new Date() }
         } else {
@@ -66,30 +84,8 @@ export function Home() {
     setActiveCycleId(null)
   }
 
-  /** activeCycle com base no ID do ciclo ativo percorre todos os ciclos e retorna
-   * o ciclo com mesmo ID do ciclo ativo
-   */
-  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
-  /** Math.round arredonda + .5 para cima e - .5 para baixo */
-  /** Math.ceil arredonda para cima */
-
-  // Math.floor arredonda para baixo
-  const minutesAmount = Math.floor(currentSeconds / 60)
-  const secondsAmount = currentSeconds % 60 // Pega o resto, para mostrar os seg
-
-  // padStart() método que preenche uma string até um tamanho específico com algum caracteres
-  // padStart(2, '0')
-  const minutes = String(minutesAmount).padStart(2, '0')
-  const seconds = String(secondsAmount).padStart(2, '0')
-
-  useEffect(() => {
-    if (activeCycle) {
-      document.title = `${minutes}:${seconds}`
-    }
-  }, [minutes, seconds, activeCycle])
-
-  const task = watch('task')
-  const isSubmitDisabled = !task
+  // const task = watch('task')
+  // const isSubmitDisabled = !task
 
   /**
    *  Prop Drilling -> Quando a gente tem muitas propriedades APENAS para a
@@ -101,9 +97,13 @@ export function Home() {
 
   return (
     <HomeContainer>
-      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
-        <NewCycleForm />
-        <Countdown activeCycle={activeCycle} setCycles={setCycles} />
+      <form /* onSubmit={handleSubmit(handleCreateNewCycle)} */ action="">
+        <CyclesContext.Provider
+          value={{ activeCycle, activeCycleId, markCurrentCycleAsFinished }}
+        >
+          {/* <NewCycleForm /> */}
+          <Countdown />
+        </CyclesContext.Provider>
 
         {activeCycle ? (
           <StopCountdownButton onClick={handleInterruptCycle} type="button">
@@ -111,7 +111,7 @@ export function Home() {
             Interromper
           </StopCountdownButton>
         ) : (
-          <StartCountdownButton disabled={isSubmitDisabled} type="submit">
+          <StartCountdownButton /* disabled={isSubmitDisabled} */ type="submit">
             <Play size={24} />
             Começar
           </StartCountdownButton>
