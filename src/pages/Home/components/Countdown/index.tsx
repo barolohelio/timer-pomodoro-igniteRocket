@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react'
 import { CountdownContainer, Separator } from './styles'
 import { differenceInSeconds } from 'date-fns'
-import { CyclesContext } from '../..'
+import { CyclesContext } from '../../../../context/CyclesContext'
 
 export function Countdown() {
   const {
@@ -16,13 +16,12 @@ export function Countdown() {
 
   useEffect(() => {
     let interval: number
-
     if (activeCycle) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       interval = setInterval(() => {
         const secondsDifference = differenceInSeconds(
           new Date(),
-          activeCycle.startDate,
+          new Date(activeCycle.startDate),
         )
         if (secondsDifference >= totalSeconds) {
           markCurrentCycleAsFinished()
