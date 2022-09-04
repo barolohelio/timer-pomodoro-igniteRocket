@@ -8,11 +8,11 @@ import { AprendendoContext } from './AprendendoContext'
 export function Router() {
   return (
     <Routes>
-      <Route path="/" element={<DefaultLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/history" element={<History />} />
+      <Route path="https://timer-pomodoro-ignite-rocket.vercel.app/" element={<DefaultLayout />}>
+        <Route path="https://timer-pomodoro-ignite-rocket.vercel.app/" element={<Home />} />
+        <Route path="https://timer-pomodoro-ignite-rocket.vercel.app/history" element={<History />} />
 
-        <Route path="/1533" element={<AprendendoContext />} />
+        <Route path="https://timer-pomodoro-ignite-rocket.vercel.app/1533" element={<AprendendoContext />} />
       </Route>
     </Routes>
   )
