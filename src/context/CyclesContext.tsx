@@ -33,15 +33,16 @@ export function CyclesContextProvider({children}:CyclesContextProviderProps) {
      {
     cycles: [],
     activeCycleId: null
-  },() => {
-    const storedStateAsJson = localStorage.getItem(
-      '@ignite-timer:cycles-state=1.0.0',
-    )
+  }
+  // ,() => {
+  //   const storedStateAsJson = localStorage.getItem(
+  //     '@ignite-timer:cycles-state=1.0.0',
+  //   )
 
-    if(storedStateAsJson){
-      return JSON.parse(storedStateAsJson)
-    }
-  },
+  //   if(storedStateAsJson){
+  //     return JSON.parse(storedStateAsJson)
+  //   }
+  // },
   )
 
   
