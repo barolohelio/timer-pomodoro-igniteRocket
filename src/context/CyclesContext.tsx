@@ -44,9 +44,11 @@ export function CyclesContextProvider({children}:CyclesContextProviderProps) {
   },
   )
 
-  const {cycles, activeCycleId} = cyclesState
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-
+  
+  const {cycles, activeCycleId} = cyclesState || {}
+  const activeCycle = cycles?.find((cycle) => cycle.id === activeCycleId)
+  console.log(cycles)
+  
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
     if(activeCycle){
       return differenceInSeconds(new Date(), new Date(activeCycle.startDate))
