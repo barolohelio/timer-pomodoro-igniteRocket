@@ -4,7 +4,6 @@ import { createContext, ReactNode, useEffect, useReducer, useState } from 'react
 import { ActionTypes, addNewCycleAction, interruptCurrentCycleAction ,markCurrentCycleAsFinishedAction} from '../reducers/cycles/actions'
 import { Cycle, cyclesReducer} from '../reducers/cycles/reducer'
 
-
 interface CreateCycleData {
   task: string
   minutesAmount: number
@@ -27,26 +26,28 @@ interface CyclesContextProviderProps{
   children: ReactNode
 }
 
-
 export function CyclesContextProvider({children}:CyclesContextProviderProps) {
   const [cyclesState, dispatch] = useReducer(cyclesReducer,
      {
     cycles: [],
     activeCycleId: null
-  },() => {
-    const storedStateAsJson = localStorage.getItem(
-      '@ignite-timer:cycles-state=1.0.0',
-    )
+  }
+ ,() => {
+     const storedStateAsJson = localStorage.getItem(
+       '@ignite-timer:cycles-state=1.0.0'
+     )
 
-    if(storedStateAsJson){
-      return JSON.parse(storedStateAsJson)
-    }
-  },
+     if(storedStateAsJson){
+       return JSON.parse(storedStateAsJson)
+     }
+   }
   )
 
-  const {cycles, activeCycleId} = cyclesState
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-
+  
+  const {cycles, activeCycleId} = cyclesState || {}
+  const activeCycle = cycles?.find((cycle) => cycle.id === activeCycleId)
+  console.log(cycles)
+  
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
     if(activeCycle){
       return differenceInSeconds(new Date(), new Date(activeCycle.startDate))
