@@ -50,12 +50,12 @@ export function CyclesContextProvider({
     () => {
       const storedStateAsJson = localStorage.getItem(
         "@ignite-timer:cycles-state=1.0.0"
-      ) 
-
+      );
+      console.log(storedStateAsJson);
       if (storedStateAsJson) {
         return JSON.parse(storedStateAsJson);
       } else {
-        return null
+        return null;
       }
     }
   );
