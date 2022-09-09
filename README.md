@@ -20,7 +20,13 @@
 Clone o repositório no local desejado
 
 * Instale o pacote de dependências. 
-  - npm install
+   ```bash
+    npm install
+  ```
   
 * Execute o projeto como desenvolvedor
-  - npm run dev
+  ```bash
+    npm run dev
+  ```
+  
+ Acesse [http://127.0.0.1:5173/](http://127.0.0.1:5173/) com seu navegador e veja o resultado.
