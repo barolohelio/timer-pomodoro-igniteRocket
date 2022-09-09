@@ -36,26 +36,30 @@ interface CyclesContextProviderProps {
   children: ReactNode;
 }
 
-
-export function CyclesContextProvider({children}:CyclesContextProviderProps) {
-  const [cyclesState, dispatch] = useReducer(cyclesReducer,
-     {
-    cycles: [],
-    activeCycleId: null
-  },() => {
-    const storedStateAsJson = localStorage.getItem(
-      '@ignite-timer:cycles-state=1.0.0',
-    )
-
-    if(storedStateAsJson){
-      return JSON.parse(storedStateAsJson)
+export function CyclesContextProvider({
+  children,
+}: CyclesContextProviderProps) {
+  const [cyclesState, dispatch] = useReducer(
+    cyclesReducer,
+    {
+      cycles: [],
+      activeCycleId: null,
     }
-  },
-  )
+    // ,
+    // () => {
+    //   const storedStateAsJson = localStorage.getItem(
+    //     "@ignite-timer:cycles-state=1.0.0"
+    //   );
+
+    //     if (storedStateAsJson) {
+    //       return JSON.parse(storedStateAsJson);
+    //     }
+
+    // }
+  );
 
   const { cycles, activeCycleId } = cyclesState || {};
   const activeCycle = cycles?.find((cycle) => cycle.id === activeCycleId);
-  console.log(cycles);
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
     if (activeCycle) {
@@ -64,6 +68,7 @@ export function CyclesContextProvider({children}:CyclesContextProviderProps) {
 
     return 0;
   });
+
   useEffect(() => {
     const stateJSON = JSON.stringify(cyclesState);
 
