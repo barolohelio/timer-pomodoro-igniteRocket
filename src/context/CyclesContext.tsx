@@ -37,13 +37,12 @@ export function CyclesContextProvider({children}:CyclesContextProviderProps) {
        '@ignite-timer:cycles-state=1.0.0'
      )
 
-     if(storedStateAsJson){
-       return JSON.parse(storedStateAsJson)
-     }
-   }
+      if(storedStateAsJson){
+         return JSON.parse(storedStateAsJson)
+       }
+    }
   )
 
-  
   const {cycles, activeCycleId} = cyclesState || {}
   const activeCycle = cycles?.find((cycle) => cycle.id === activeCycleId)
   console.log(cycles)
