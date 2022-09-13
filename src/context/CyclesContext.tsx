@@ -7,9 +7,7 @@ import {
   useReducer,
   useState,
 } from "react";
-import { undefined } from "zod";
 import {
-  ActionTypes,
   addNewCycleAction,
   interruptCurrentCycleAction,
   markCurrentCycleAsFinishedAction,
@@ -46,23 +44,22 @@ export function CyclesContextProvider({
     {
       cycles: [],
       activeCycleId: null,
-    },
-    () => {
-      const storedStateAsJson = localStorage.getItem(
-        "@ignite-timer:cycles-state=1.0.0"
-      );
-      console.log(storedStateAsJson);
-      if (storedStateAsJson) {
-        return JSON.parse(storedStateAsJson);
-      } else {
-        return null;
-      }
     }
+    // ,
+    // () => {
+    //   const storedStateAsJson = localStorage.getItem(
+    //     "@ignite-timer:cycles-state=1.0.0"
+    //   );
+
+    //     if (storedStateAsJson) {
+    //       return JSON.parse(storedStateAsJson);
+    //     }
+
+    // }
   );
 
   const { cycles, activeCycleId } = cyclesState || {};
   const activeCycle = cycles?.find((cycle) => cycle.id === activeCycleId);
-  console.log(cycles);
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
     if (activeCycle) {
@@ -71,6 +68,7 @@ export function CyclesContextProvider({
 
     return 0;
   });
+
   useEffect(() => {
     const stateJSON = JSON.stringify(cyclesState) ;
 
