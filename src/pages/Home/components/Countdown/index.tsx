@@ -60,7 +60,6 @@ export function Countdown() {
   useEffect(() => {
     if (activeCycle) {
       document.title = `${minutes}:${seconds}`
-      console.log('João Gordão')
     }
   }, [minutes, seconds, activeCycle])
 
