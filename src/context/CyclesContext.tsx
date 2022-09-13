@@ -72,7 +72,7 @@ export function CyclesContextProvider({
     return 0;
   });
   useEffect(() => {
-    const stateJSON = JSON.stringify(cyclesState);
+    const stateJSON = JSON.stringify(cyclesState) ;
 
     localStorage.setItem("@ignite-timer:cycles-state=1.0.0", stateJSON);
   }, [cyclesState]);
